@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
 from server import utils
@@ -84,4 +84,14 @@ class Share(ShareTable):
             return
 
         db.session.delete(self)
+        db.session.commit()
+
+    @classmethod
+    def delete_expired(cls):
+        expiry = datetime.now() - timedelta(days=7)
+
+        db.session.query(cls).filter(
+            (cls.confirmed == False) & (cls.created_at < expiry)
+        ).delete()  # noqa
+
         db.session.commit()

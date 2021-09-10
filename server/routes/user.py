@@ -1,3 +1,5 @@
+import hashlib
+
 import jwt
 
 from flask import Blueprint
@@ -7,7 +9,7 @@ from webargs import fields, validate
 from server.extensions import limiter
 from server.models.person import Person
 from server.routes import Response, parse_body, respond_default, respond_error
-from server.utils import config, security
+from server.utils import config, mail, security
 
 bp = Blueprint("user", __name__)
 
@@ -15,7 +17,10 @@ bp = Blueprint("user", __name__)
 @bp.get("/user")
 @login_required
 def get_user() -> Response:
-    person = current_user.person.to_dict()
+    person = current_user.person().to_dict()
+
+    avatar = hashlib.md5(person["email"].lower().encode()).hexdigest()
+    person["avatar"] = f"https://www.gravatar.com/avatar/{avatar}?d=retro"
 
     del person["password"]
     del person["public_key"]
@@ -31,7 +36,7 @@ def get_user() -> Response:
     email=fields.Email(validate=validate.Length(6, 256)),
 )
 def patch_user(body: dict) -> Response:
-    person = current_user.person
+    person = current_user.person()
 
     if person.email == body.get("email"):
         del body["email"]
@@ -54,7 +59,7 @@ def patch_user(body: dict) -> Response:
     password=fields.Str(required=True, validate=validate.Length(8, 128)),
 )
 def delete_user(body: dict) -> Response:
-    person = current_user.person
+    person = current_user.person()
 
     if security.check_password(body["password"], person.password) is False:
         return respond_error(400, "Password is incorrect.")
@@ -66,7 +71,7 @@ def delete_user(body: dict) -> Response:
 
 # todo: test
 @bp.post("/user/verify")
-@limiter.limit("5/min, 25/day")
+@limiter.limit("5/minute, 25/day")
 @login_required
 @parse_body(
     token=fields.Str(required=True),
@@ -88,7 +93,7 @@ def post_user_verify(body: dict) -> Response:
     except jwt.PyJWTError:
         return respond_error(400, "Verification token is invalid.")
 
-    person = current_user.person
+    person = current_user.person()
 
     if person.verified:
         return respond_error(400, "Email is already verified.")
@@ -101,13 +106,17 @@ def post_user_verify(body: dict) -> Response:
     return respond_default()
 
 
-# todo: test
 @bp.post("/user/resend_verify")
-@limiter.limit("1/min, 5/day")
+@limiter.limit("1/minute")
 @login_required
 @parse_body()
 def post_user_resend_verify() -> Response:
-    # TODO: Send email
+    person = current_user.person()
+
+    if person.verified is True:
+        return respond_error(400, "Email is already verified.")
+
+    mail.send_verify(person)
 
     return respond_default()
 
@@ -119,7 +128,7 @@ def post_user_resend_verify() -> Response:
     password=fields.Str(required=True, validate=validate.Length(8, 128)),
 )
 def put_user_password(body: dict) -> Response:
-    person = current_user.person
+    person = current_user.person()
 
     if security.check_password(body["old_password"], person.password) is False:
         return respond_error(400, "Old password is incorrect.")

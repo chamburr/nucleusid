@@ -80,7 +80,7 @@ def too_many_requests(err: TooManyRequests) -> (dict, int):
 def internal_server_respond_error(err: InternalServerError) -> (dict, int):
     return respond_error(
         err.code,
-        "The server encountered an internal respond_error.",
+        "The server encountered an internal error.",
     )
 
 

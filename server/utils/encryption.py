@@ -115,12 +115,10 @@ class DataCipher:
 
     def encrypt_account(self, account: dict) -> dict:
         account["password"] = self.encrypt(account["password"])
-        account["totp"] = self.encrypt(account["totp"])
 
         return account
 
     def decrypt_account(self, account: dict) -> dict:
         account["password"] = self.decrypt(account["password"])
-        account["totp"] = self.decrypt(account["totp"])
 
         return account

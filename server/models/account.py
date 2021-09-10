@@ -28,7 +28,6 @@ class Account(AccountTable, IdMixin):
             "name": self.name,
             "username": self.username,
             "password": self.password,
-            "totp": self.totp,
             "note": self.note,
             "created_at": utils.format_timestamp(self.created_at),
         }
@@ -42,7 +41,6 @@ class Account(AccountTable, IdMixin):
         name: str,
         username: str,
         password: str,
-        totp: str,
         note: str,
     ) -> Account:
         account = cls(
@@ -52,7 +50,6 @@ class Account(AccountTable, IdMixin):
             name=name,
             username=username,
             password=password,
-            totp=totp,
             note=note,
         )
 
@@ -92,7 +89,6 @@ class Account(AccountTable, IdMixin):
         name: Optional[str] = None,
         username: Optional[str] = None,
         password: Optional[str] = None,
-        totp: Optional[str] = None,
         note: Optional[str] = None,
     ):
         if name is not None:
@@ -103,9 +99,6 @@ class Account(AccountTable, IdMixin):
 
         if password is not None:
             self.password = cipher.encrypt(password)
-
-        if totp is not None:
-            self.totp = cipher.encrypt(totp)
 
         if note is not None:
             self.note = note
@@ -135,7 +128,6 @@ class Account(AccountTable, IdMixin):
         )
 
         self.password = new_cipher.re_encrypt(cipher, self.password)
-        self.totp = new_cipher.re_encrypt(cipher, self.totp)
 
         db.session.commit()
 

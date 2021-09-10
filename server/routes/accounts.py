@@ -71,7 +71,6 @@ def get_accounts() -> Response:
     name=fields.Str(required=True, validate=validate.Length(1, 64)),
     username=fields.Str(required=True, validate=validate.Length(1, 256)),
     password=fields.Str(required=True, validate=validate.Length(1, 256)),
-    totp=fields.Str(required=True, validate=validate.Length(0, 64)),
     note=fields.Str(required=True, validate=validate.Length(0, 1024)),
 )
 def post_accounts(body: dict) -> Response:
@@ -91,7 +90,6 @@ def post_accounts(body: dict) -> Response:
         name=body["name"],
         username=body["username"],
         password=body["password"],
-        totp=body["totp"],
         note=body["note"],
     )
 
@@ -116,7 +114,6 @@ def get_accounts_item(item: int) -> Response:
     name=fields.Str(validate=validate.Length(1, 64)),
     username=fields.Str(validate=validate.Length(1, 256)),
     password=fields.Str(validate=validate.Length(1, 256)),
-    totp=fields.Str(validate=validate.Length(0, 64)),
     note=fields.Str(validate=validate.Length(0, 1024)),
 )
 def patch_accounts_item(body: dict, item: int) -> Response:
@@ -133,7 +130,6 @@ def patch_accounts_item(body: dict, item: int) -> Response:
         name=body.get("name"),
         username=body.get("username"),
         password=body.get("password"),
-        totp=body.get("totp"),
         note=body.get("note"),
     )
 

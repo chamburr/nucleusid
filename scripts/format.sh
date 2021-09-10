@@ -1,4 +1,4 @@
 WORKDIR=$(pwd)
 
 echo "Formatting..."
-cd "$WORKDIR/server" && isort . && black .
+poetry run poe format

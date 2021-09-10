@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Optional
 
 from server import utils
-from server.extensions import db
+from server.extensions import db, redis
 from server.models import PersonTable
 from server.models.mixins import IdMixin
 from server.utils import security, snowflake
@@ -107,6 +107,11 @@ class Person(PersonTable, IdMixin):
         for share in shares:
             share.secret = cipher.re_encrypt(old_cipher, Share.secret)
 
+        redis.delete(f"person:{self.id}")
+
+        devices = Device.find_by_person(self.id)
+        redis.delete(*(f"device:{x.id}" for x in devices))
+
         db.session.query(Device).filter_by(person=self.id).delete()
 
         db.session.commit()
@@ -116,6 +121,11 @@ class Person(PersonTable, IdMixin):
         from server.models.device import Device
         from server.models.folder import Folder
         from server.models.share import Share
+
+        redis.delete(f"person:{self.id}")
+
+        devices = Device.find_by_person(self.id)
+        redis.delete(*(f"device:{x.id}" for x in devices))
 
         db.session.query(Account).filter_by(person=self.id).delete()
         db.session.query(Device).filter_by(person=self.id).delete()

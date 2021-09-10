@@ -5,7 +5,7 @@ import hashlib
 
 from calendar import timegm
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Union
 
 import bcrypt
 import jwt
@@ -13,14 +13,11 @@ import jwt
 from flask import Request
 from flask_login import UserMixin
 
-from server.extensions import login
+from server.extensions import login, redis
 from server.models import person as _person
 from server.models.device import Device
 from server.utils import config
 from server.utils.encryption import DataCipher, SecretCipher
-
-#  TODO: Use Redis for caching
-#  TODO: Update device table
 
 
 class User(UserMixin):
@@ -29,17 +26,31 @@ class User(UserMixin):
         token: str,
         iat: int,
         exp: int,
-        person: _person.Person,
-        device: Device,
+        person: Union[_person.Person, int],
+        device: Union[Device, int],
+        secret: Optional[str],
         key: str,
     ):
         self.token = token
         self.iat = iat
         self.exp = exp
-        self.person = person
-        self.device = device
         self.key = key
-        self.id = person.id
+
+        if isinstance(person, _person.Person):
+            self._person = person
+            self._person_id = person.id
+            self._secret = person.secret
+        else:
+            self._person = None
+            self._person_id = person
+            self._secret = secret
+
+        if isinstance(device, Device):
+            self._device = device
+            self._device_id = device.id
+        else:
+            self._device = None
+            self._device_id = device
 
         self._secret_cipher = None
         self._data_cipher = None
@@ -66,7 +77,7 @@ class User(UserMixin):
             "HS256",
         )
 
-        return User(token, issued_at, expires_at, person, device, key)
+        return User(token, issued_at, expires_at, person, device, None, key)
 
     @classmethod
     def from_token(cls, token: str) -> Optional[User]:
@@ -84,12 +95,30 @@ class User(UserMixin):
         except jwt.PyJWTError:
             return None
 
-        person = _person.Person.find(int(payload["user"]))
-        if person is None:
-            return None
+        person = int(payload["user"])
+        device = int(payload["device"])
 
-        device = Device.find(int(payload["device"]))
-        if device is None or device.token_iat != payload["iat"]:
+        secret = redis.get(f"person:{person}")
+        if secret is None:
+            person = _person.Person.find(person)
+            if person is None:
+                return None
+
+            secret = person.secret
+            redis.set(f"person:{person.id}", secret)
+            redis.expire(f"person:{person.id}", timedelta(hours=1))
+
+        token_iat = redis.get(f"device:{device}")
+        if token_iat is None:
+            device = Device.find(device)
+            if device is None:
+                return None
+
+            token_iat = str(device.token_iat)
+            redis.set(f"device:{device.id}", token_iat)
+            redis.expire(f"device:{device.id}", timedelta(hours=1))
+
+        if token_iat != str(payload["iat"]):
             return None
 
         return User(
@@ -98,26 +127,29 @@ class User(UserMixin):
             payload["exp"],
             person,
             device,
+            secret,
             payload["key"],
         )
 
-    def verify_link(self) -> str:
-        issued_at = datetime.utcnow()
-        expires_at = issued_at + timedelta(days=1)
+    @property
+    def id(self) -> int:
+        return self._person_id
 
-        issued_at = timegm(issued_at.utctimetuple())
-        expires_at = timegm(expires_at.utctimetuple())
+    @property
+    def device_id(self) -> int:
+        return self._device_id
 
-        token = jwt.encode(
-            {
-                "iat": issued_at,
-                "exp": expires_at,
-                "user": str(self.person.id),
-                "email": self.person.email,
-            },
-            config.SECRET_KEY,
-            "HS256",
-        )
+    def person(self) -> _person.Person:
+        if self._person is None:
+            self._person = _person.Person.find(self._person_id)
+
+        return self._person
+
+    def device(self) -> Device:
+        if self._device is None:
+            self._device = Device.find(self._device_id)
+
+        return self._device
 
     def secret_cipher(self) -> SecretCipher:
         if self._secret_cipher is not None:
@@ -135,17 +167,17 @@ class User(UserMixin):
             return self._data_cipher
 
         self._data_cipher = DataCipher.from_key(
-            self.secret_cipher().decrypt(self.person.secret)
+            self.secret_cipher().decrypt(self._secret)
         )
 
         return self._data_cipher
 
     def refresh_token(self):
-        user = User.create(self.person, self.device, self.key)
+        user = User.create(self.person(), self.device(), self.key)
         self.token = user.token
 
     def logout(self):
-        self.device.delete()
+        self.device().delete()
 
 
 @login.request_loader
@@ -160,7 +192,11 @@ def load_user_from_request(request: Request) -> Optional[User]:
     if user is None:
         return None
 
-    user.device.update_last_login()
+    device_login = redis.exists(f"device_login:{user.device_id}")
+    if device_login is False:
+        user.device().update_last_login()
+        redis.set(f"device_login:{user.device_id}", "")
+        redis.expire(f"device_login:{user.device_id}", timedelta(minutes=1))
 
     return user
 

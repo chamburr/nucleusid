@@ -1,5 +1,15 @@
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Callable, Optional
+
+from flask import Flask
+
+
+def with_context(app: Flask, func: Callable) -> Callable:
+    def function():
+        with app.app_context():
+            func()
+
+    return function
 
 
 def format_timestamp(timestamp: datetime) -> str:

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
 from server import utils
-from server.extensions import db
+from server.extensions import db, redis
 from server.models import DeviceTable
 from server.models.mixins import IdMixin
 from server.utils import snowflake
@@ -78,6 +78,7 @@ class Device(DeviceTable, IdMixin):
             self.location = location
 
         if token_iat is not None:
+            redis.delete(f"device:{self.id}")
             self.token_iat = token_iat
 
         db.session.commit()
@@ -88,5 +89,15 @@ class Device(DeviceTable, IdMixin):
         db.session.commit()
 
     def delete(self):
+        redis.delete(f"device:{self.id}")
+
         db.session.delete(self)
+        db.session.commit()
+
+    @classmethod
+    def delete_expired(cls):
+        expiry = datetime.now() - timedelta(days=7)
+
+        db.session.query(cls).filter(cls.last_login < expiry).delete()
+
         db.session.commit()
