@@ -50,7 +50,6 @@ CREATE TABLE account
     name        text      NOT NULL,
     username    text      NOT NULL,
     password    text      NOT NULL,
-    totp        text      NOT NULL,
     note        text      NOT NULL
 );
 

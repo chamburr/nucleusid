@@ -8,6 +8,7 @@ from server.models.folder import Folder
 from server.models.person import Person
 from server.models.share import Share
 from server.routes import Response, parse_body, respond_default, respond_error
+from server.utils import mail
 from server.utils.encryption import SecretCipher
 
 bp = Blueprint("folders", __name__)
@@ -182,14 +183,14 @@ def post_folders_item_shares(body: dict, item: int) -> Response:
     cipher = SecretCipher.from_public_key(person.public_key)
     secret = cipher.re_encrypt(current_user.secret_cipher(), share.secret)
 
-    Share.create(
+    new_share = Share.create(
         folder=folder.id,
         person=person.id,
         view_only=body["view_only"],
         secret=secret,
     )
 
-    # TODO: send email
+    mail.send_share(current_user.person(), person, new_share)
 
     return respond_default()
 

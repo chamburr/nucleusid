@@ -75,7 +75,6 @@ class AccountTable(Base):
     name = Column(Text, nullable=False)
     username = Column(Text, nullable=False)
     password = Column(Text, nullable=False)
-    totp = Column(Text, nullable=False)
     note = Column(Text, nullable=False)
 
     folder1 = relationship("Folder")

@@ -1,4 +1,5 @@
 .idea/
-client/
 __pycache__
 docs/
+node_modules/
+.nuxt/

@@ -102,7 +102,6 @@ class Folder(FolderTable, IdMixin):
                 account.password = cipher.re_encrypt(
                     old_cipher, account.password
                 )
-                account.totp = cipher.re_encrypt(old_cipher, account.totp)
 
             share = Share(
                 folder=self.id,
@@ -132,7 +131,6 @@ class Folder(FolderTable, IdMixin):
         accounts = db.session.query(Account).filter_by(folder=self.id).all()
         for account in accounts:
             account.password = cipher.re_encrypt(old_cipher, account.password)
-            account.totp = cipher.re_encrypt(old_cipher, account.totp)
 
         db.session.query(Share).filter_by(folder=self.id).delete()
 
