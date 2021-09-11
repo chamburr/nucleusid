@@ -9,7 +9,7 @@ export default {
   async mounted() {
     await this.$axios
       .post('/auth/logout')
-      .then(() => {
+      .then(async () => {
         this.$store.commit('accounts/reset')
         this.$store.commit('devices/reset')
         this.$store.commit('folders/reset')
@@ -20,7 +20,7 @@ export default {
         sessionStorage.clear()
 
         this.$toast.success('You have logged out successfully.')
-        this.$router.push('/login')
+        await this.$router.push('/login')
       })
       .catch(this.$fatal)
   },

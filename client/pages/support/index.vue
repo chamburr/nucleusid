@@ -4,7 +4,7 @@
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum porta velit
       consequat sagittis.
     </Heading>
-    <BaseInput v-model="search" placeholder="Search..." class="mb-4"></BaseInput>
+    <BaseInput v-model="search" placeholder="Search..." class="mb-4" />
     <div class="row">
       <div
         v-for="element in activeArticles"

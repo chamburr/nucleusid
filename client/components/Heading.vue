@@ -1,6 +1,9 @@
 <template>
   <div class="pb-4">
-    <h1 class="display-2">{{ title }}</h1>
+    <div :class="$slots.trailing ? 'd-flex justify-content-between' : ''">
+      <h1 class="display-2 mb-0">{{ title }}</h1>
+      <slot name="trailing"></slot>
+    </div>
     <p class="heading-description"><slot></slot></p>
   </div>
 </template>

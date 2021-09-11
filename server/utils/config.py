@@ -57,7 +57,6 @@ def redis_url() -> str:
 flask_config = {
     "ENV": ENVIRONMENT,
     "JSON_SORT_KEYS": False,
-    "SQLALCHEMY_ECHO": True,
     "SQLALCHEMY_DATABASE_URI": postgres_url(),
     "SQLALCHEMY_TRACK_MODIFICATIONS": False,
     "RATELIMIT_APPLICATION": "10/second",

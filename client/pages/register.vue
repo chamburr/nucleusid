@@ -2,28 +2,13 @@
   <div>
     <Heading title="Register" />
     <div class="col-12 col-md-8 col-lg-6 px-0">
-      <BaseInput
-        id="register-name"
-        v-model="name"
-        type="text"
-        class="mb-4"
-        :required="true"
-        label="Name"
-      />
-      <BaseInput
-        id="register-email"
-        v-model="email"
-        type="email"
-        class="mb-4"
-        :required="true"
-        label="Email"
-      />
+      <BaseInput id="register-name" v-model="name" class="mb-4" label="Name" />
+      <BaseInput id="register-email" v-model="email" type="email" class="mb-4" label="Email" />
       <BaseInput
         id="register-password"
         v-model="password"
         type="password"
         class="mb-4"
-        :required="true"
         label="Password"
       />
     </div>
@@ -52,9 +37,9 @@ export default {
   head: {
     title: 'Register',
   },
-  mounted() {
+  async mounted() {
     if (localStorage.getItem('token') ?? sessionStorage.getItem('token')) {
-      this.$router.push('/dashboard')
+      await this.$router.push('/dashboard')
     }
   },
   methods: {
@@ -91,9 +76,9 @@ export default {
 
       await this.$axios
         .$post(`/auth/register`, { name: this.name, email: this.email, password: this.password })
-        .then(() => {
+        .then(async () => {
           this.$toast.success('Your account is registered successfully.')
-          this.$router.push('/login')
+          await this.$router.push('/login')
         })
         .catch(this.$error)
     },

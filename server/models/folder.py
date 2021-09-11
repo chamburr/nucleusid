@@ -51,14 +51,21 @@ class Folder(FolderTable, IdMixin):
         return db.session.query(cls).get(identifier)
 
     @classmethod
-    def find_by_person(cls, person: int) -> list[Folder]:
+    def find_by_person(cls, person: int, *, confirmed: bool = True) -> list[Folder]:
         from server.models.share import Share
 
-        shares = [
-            x.folder
-            for x in Share.find_by_person(person)
-            if x.confirmed is True and x.owner is False
-        ]
+        if confirmed is True:
+            shares = [
+                x.folder
+                for x in Share.find_by_person(person)
+                if x.confirmed is True and x.owner is False
+            ]
+        else:
+            shares = [
+                x.folder
+                for x in Share.find_by_person(person)
+                if x.owner is False
+            ]
 
         return (
             db.session.query(cls)

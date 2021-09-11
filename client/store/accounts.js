@@ -11,6 +11,14 @@ export const mutations = {
   add(state, account) {
     state.accounts.push(Object.assign({}, account))
   },
+  update(state, { id, name, username, password, note }) {
+    const account = state.accounts.find(element => element.id === id)
+
+    account.name = name
+    account.username = username
+    account.password = password
+    account.note = note
+  },
   remove(state, id) {
     state.accounts = state.accounts.filter(element => element.id !== id)
   },
@@ -23,11 +31,6 @@ export const mutations = {
 export const getters = {
   get(state) {
     return [...state.accounts]
-  },
-  getById(state, id) {
-    return {
-      ...(state.accounts.find(element => element.id === id) ?? {}),
-    }
   },
   isNull(state) {
     return state.isNull

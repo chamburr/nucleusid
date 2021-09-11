@@ -76,6 +76,10 @@ class Person(PersonTable, IdMixin):
     def find_by_email(cls, email: str) -> Optional[Person]:
         return db.session.query(cls).filter_by(email=email).one_or_none()
 
+    @classmethod
+    def batch_find(cls, identifiers: list[int]) -> list[Person]:
+        return db.session.query(cls).filter(cls.id.in_(identifiers)).all()
+
     def update(
         self, *, name: Optional[str] = None, email: Optional[str] = None
     ):
@@ -127,9 +131,12 @@ class Person(PersonTable, IdMixin):
         devices = Device.find_by_person(self.id)
         redis.delete(*(f"device:{x.id}" for x in devices))
 
+        folders = [x.id for x in Folder.find_by_person(self.id) if x.person == self.id]
+
         db.session.query(Account).filter_by(person=self.id).delete()
         db.session.query(Device).filter_by(person=self.id).delete()
         db.session.query(Share).filter_by(person=self.id).delete()
+        db.session.query(Share).filter(Share.folder.in_(folders)).delete()
         db.session.query(Folder).filter_by(person=self.id).delete()
 
         db.session.delete(self)

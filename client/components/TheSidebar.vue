@@ -10,7 +10,29 @@
         <NuxtLink to="/dashboard">
           <div class="sidebar-link font-weight-bold text-white px-4 py-2">All Accounts</div>
         </NuxtLink>
-        <div class="small font-weight-bold text-light text-uppercase px-4 mt-3 mb-2">Folders</div>
+        <div
+          class="
+            small
+            font-weight-bold
+            text-light text-uppercase
+            px-4
+            mt-3
+            mb-2
+            d-flex
+            justify-content-between
+          "
+        >
+          Folders
+          <BaseButton
+            id="sidebar-folder-plus"
+            icon="fas plus"
+            class="pl-0 small"
+            type=""
+            text-color="light"
+            :icon-only="true"
+            @click="newFolder"
+          />
+        </div>
         <NuxtLink
           v-for="element in folders"
           :key="element.id"
@@ -27,6 +49,15 @@
         </NuxtLink>
       </div>
     </div>
+    <BaseModal
+      id="sidebar-folder-modal"
+      title="New Folder"
+      ok-title="Create"
+      @cancel="folder = ''"
+      @ok="createFolder"
+    >
+      <BaseInput id="sidebar-folder-name" v-model="folder" label="Name" />
+    </BaseModal>
   </nav>
 </template>
 
@@ -35,9 +66,42 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'TheSidebar',
+  data() {
+    return {
+      folder: '',
+    }
+  },
   computed: {
     ...mapGetters('user', { user: 'get' }),
     ...mapGetters('folders', { folders: 'get' }),
+  },
+  methods: {
+    newFolder() {
+      this.$bvModal.show('sidebar-folder-modal')
+    },
+    async createFolder() {
+      if (!this.folder) {
+        this.$toast.danger('Name cannot be empty.')
+        this.folder = ''
+        return
+      }
+
+      if (this.folder.length < 2 || this.folder.length > 32) {
+        this.$toast.danger('Name must be between 2 and 32 characters.')
+        this.folder = ''
+        return
+      }
+
+      const folder = await this.$axios
+        .post('/folders', {
+          name: this.folder,
+        })
+        .catch(this.$error)
+
+      this.folder = ''
+      this.$store.commit('folders/add', folder.data)
+      this.$toast.success('Created the folder.')
+    },
   },
 }
 </script>
@@ -66,5 +130,21 @@ export default {
 #sidebar-icon {
   height: 100px;
   width: 100px;
+}
+
+#sidebar-folder-plus {
+  height: 0;
+  border: 0;
+
+  /deep/ .icon {
+    height: initial !important;
+    top: -3px;
+    width: 0;
+    position: relative;
+
+    svg {
+      font-size: 1rem;
+    }
+  }
 }
 </style>

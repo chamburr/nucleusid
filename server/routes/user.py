@@ -38,10 +38,12 @@ def get_user() -> Response:
 def patch_user(body: dict) -> Response:
     person = current_user.person()
 
-    if person.email == body.get("email"):
+    if person.email == body.get("email", "").lower():
         del body["email"]
 
     if body.get("email") is not None:
+        body["email"] = body["email"].lower()
+
         if Person.find_by_email(body["email"]) is not None:
             return respond_error(400, "Email is already registered.")
 
@@ -109,7 +111,6 @@ def post_user_verify(body: dict) -> Response:
 @bp.post("/user/resend_verify")
 @limiter.limit("1/minute")
 @login_required
-@parse_body()
 def post_user_resend_verify() -> Response:
     person = current_user.person()
 

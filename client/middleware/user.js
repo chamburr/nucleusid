@@ -1,13 +1,14 @@
 export default async ({ $axios, $fatal, store, redirect, route }) => {
   if (store.getters['user/isNull']) {
     const user = await $axios.$get('/user').catch(err => {
+      localStorage.clear()
+      sessionStorage.clear()
+
       if (err.response.status !== 401) $fatal(err)
       else redirect(`/login?redirect=${encodeURIComponent(route.fullPath)}`)
     })
 
     if (!user) {
-      localStorage.clear()
-      sessionStorage.clear()
       return
     }
 

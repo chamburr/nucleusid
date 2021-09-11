@@ -2,20 +2,12 @@
   <div>
     <Heading title="Login" />
     <div class="col-12 col-md-8 col-lg-6 px-0">
-      <BaseInput
-        id="login-email"
-        v-model="email"
-        type="email"
-        class="mb-4"
-        :required="true"
-        label="Email"
-      />
+      <BaseInput id="login-email" v-model="email" type="email" class="mb-4" label="Email" />
       <BaseInput
         id="login-password"
         v-model="password"
         type="password"
         class="mb-4"
-        :required="true"
         label="Password"
       />
       <BaseCheckbox id="login-remember" v-model="remember" class="mb-4" label="Remember me" />
@@ -45,9 +37,9 @@ export default {
   head: {
     title: 'Login',
   },
-  mounted() {
+  async mounted() {
     if (localStorage.getItem('token') ?? sessionStorage.getItem('token')) {
-      this.$router.push('/dashboard')
+      await this.$router.push('/dashboard')
     }
   },
   methods: {
@@ -74,7 +66,7 @@ export default {
 
       await this.$axios
         .$post(`/auth/login`, { email: this.email, password: this.password })
-        .then(res => {
+        .then(async res => {
           if (this.remember) localStorage.setItem('token', res.token)
           else sessionStorage.setItem('token', res.token)
 
@@ -85,7 +77,7 @@ export default {
             redirect = '/dashboard'
           }
 
-          this.$router.push(redirect)
+          await this.$router.push(redirect)
         })
         .catch(this.$error)
     },

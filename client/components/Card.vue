@@ -2,11 +2,12 @@
   <div
     class="card"
     :class="[
-      { 'card-lift--hover': hover },
+      { 'card-button': button },
       { [`shadow-${shadowSize}`]: shadowSize },
       { [`bg-${type}`]: type },
       { shadow: shadow },
     ]"
+    v-on="$listeners"
   >
     <div v-if="$slots.header" class="card-header" :class="headerClasses">
       <slot name="header"></slot>
@@ -28,7 +29,7 @@ export default {
       type: String,
       default: '',
     },
-    hover: {
+    button: {
       type: Boolean,
       default: false,
     },
@@ -55,3 +56,12 @@ export default {
   },
 }
 </script>
+
+<style scoped lang="scss">
+.card-button:hover {
+  @include box-shadow($btn-hover-box-shadow);
+
+  transform: translateY(-1px);
+  cursor: pointer;
+}
+</style>

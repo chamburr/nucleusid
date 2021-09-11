@@ -8,8 +8,8 @@ export const mutations = {
     state.shares = [...shares]
     state.isNull = false
   },
-  add(state, share) {
-    state.shares.push(Object.assign({}, share))
+  update(state, { id, confirmed }) {
+    state.shares.find(element => element.folder === id).confirmed = confirmed
   },
   remove(state, id) {
     state.shares = state.shares.filter(element => element.folder !== id)
