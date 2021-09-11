@@ -6,6 +6,9 @@ export const mutations = {
   set(state, devices) {
     state.devices = [...devices]
   },
+  remove(state, id) {
+    state.devices = state.devices.filter(element => element.id !== id)
+  },
   reset(state) {
     state.devices = []
   },

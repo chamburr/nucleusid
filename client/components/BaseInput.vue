@@ -2,20 +2,52 @@
   <div class="form-group d-flex flex-column" :class="[{ focused: focused }]">
     <slot v-bind="slotData">
       <slot name="before">
-        <label :for="id" class="input-label d-block mb-2" :class="labelClasses">
+        <label v-if="label" :for="id" class="input-label d-block mb-2" :class="labelClasses">
           {{ label }}
         </label>
       </slot>
-      <input
+      <div v-if="!multiline" class="input-group">
+        <input
+          :id="id"
+          v-model="realValue"
+          v-bind="$attrs"
+          class="form-control"
+          :class="inputClasses"
+          :type="showPassword ? 'text' : type"
+          aria-describedby="addon-right addon-left"
+          v-on="listeners"
+        />
+        <div
+          v-if="type === 'password' || copy"
+          class="input-group-append bg-dark px-2 align-items-center"
+        >
+          <BaseButton
+            v-if="type === 'password'"
+            :icon="showPassword ? 'fas eye-slash' : 'fas eye'"
+            type=""
+            text-color="light"
+            :icon-only="true"
+            @click="showPassword = !showPassword"
+          />
+          <BaseButton
+            v-if="copy"
+            icon="fas copy"
+            type=""
+            text-color="light"
+            :icon-only="true"
+            @click="copyValue"
+          />
+        </div>
+      </div>
+      <textarea
+        v-else
         :id="id"
         v-model="realValue"
         v-bind="$attrs"
         class="form-control"
         :class="inputClasses"
-        :type="type"
-        aria-describedby="addon-right addon-left"
         v-on="listeners"
-      />
+      ></textarea>
     </slot>
   </div>
 </template>
@@ -52,11 +84,20 @@ export default {
     value: {
       default: '',
     },
+    multiline: {
+      type: Boolean,
+      default: false,
+    },
+    copy: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       focused: false,
       realValue: this.value,
+      showPassword: false,
     }
   },
   computed: {
@@ -104,6 +145,10 @@ export default {
       this.focused = false
       this.$emit('blur', value)
     },
+    async copyValue() {
+      await navigator.clipboard.writeText(this.realValue)
+      this.$toast.success('Copied to clipboard.')
+    },
   },
 }
 </script>
@@ -112,5 +157,13 @@ export default {
 .input-label {
   font-size: 1rem;
   font-weight: 500;
+}
+
+.input-group-append {
+  border-radius: 0 0.25em 0.25em 0;
+
+  /deep/ .icon {
+    display: flex !important;
+  }
 }
 </style>

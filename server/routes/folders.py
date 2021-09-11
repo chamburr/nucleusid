@@ -43,7 +43,7 @@ def get_folder_share(
         return folder, None
 
     share = Share.find(folder.id, item2)
-    if share is None or share.confirmed is False:
+    if share is None:
         return folder, None
 
     return folder, share
@@ -140,8 +140,16 @@ def get_folders_item_shares(item: int) -> Response:
 
     shares = []
 
-    for share in Share.find_by_folder(folder.id):
+    all_shares = Share.find_by_folder(folder.id)
+    persons = Person.batch_find([x.person for x in all_shares])
+
+    for share in all_shares:
+        person = next(x for x in persons if x.id == share.person)
+
         share = share.to_dict()
+
+        share["person_email"] = person.email
+
         del share["folder"]
         del share["secret"]
 
@@ -171,6 +179,9 @@ def post_folders_item_shares(body: dict, item: int) -> Response:
     if person is None:
         return respond_error(400, "The user cannot be found.")
 
+    if person.verified is False:
+        return respond_error(400, "The user's email is not verified.")
+
     shares = Share.find_by_folder(folder.id)
 
     if next((x for x in shares if x.person == person.id), None) is not None:
@@ -192,7 +203,14 @@ def post_folders_item_shares(body: dict, item: int) -> Response:
 
     mail.send_share(current_user.person(), person, new_share)
 
-    return respond_default()
+    new_share = new_share.to_dict()
+
+    new_share["person_email"] = person.email
+
+    del new_share["folder"]
+    del new_share["secret"]
+
+    return new_share
 
 
 @bp.get("/folders/<int:item>/shares/<int:item2>")
@@ -202,7 +220,12 @@ def get_folders_item_shares_item2(item: int, item2: int) -> Response:
     if folder is None or share is None:
         return respond_error(404)
 
+    person = Person.find(share.person)
+
     share = share.to_dict()
+
+    share["person_email"] = person.email
+
     del share["folder"]
     del share["secret"]
 

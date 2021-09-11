@@ -17,10 +17,10 @@
   >
     <span v-if="icon && $slots.default" class="btn-inner--icon">
       <slot name="icon">
-        <i :class="icon"></i>
+        <BaseIcon :name="icon" :color="textColor" />
       </slot>
     </span>
-    <i v-if="!$slots.default" :class="icon"></i>
+    <BaseIcon v-if="!$slots.default" :name="icon" :color="textColor" />
     <span v-if="icon && $slots.default" class="btn-inner--text">
       <slot>
         {{ text }}

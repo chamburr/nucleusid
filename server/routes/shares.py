@@ -23,8 +23,15 @@ def get_share(item: int) -> Optional[Share]:
 def get_shares() -> Response:
     shares = []
 
+    folders = Folder.find_by_person(current_user.id, confirmed=False)
+
     for share in Share.find_by_person(current_user.id):
+        folder = next(x for x in folders if x.id == share.folder)
+
         share = share.to_dict()
+
+        share["folder_name"] = folder.name
+
         del share["person"]
         del share["secret"]
 
@@ -40,7 +47,12 @@ def get_shares_item(item: int) -> Response:
     if share is None:
         return respond_error(404)
 
+    folder = Folder.find(share.folder)
+
     share = share.to_dict()
+
+    share["folder_name"] = folder.name
+
     del share["person"]
     del share["secret"]
 
@@ -71,6 +83,9 @@ def delete_shares_item(item: int) -> Response:
     share = get_share(item)
     if share is None:
         return respond_error(404)
+
+    if share.owner is True:
+        return respond_error(400, "Owner share cannot be deleted.")
 
     share.delete()
 

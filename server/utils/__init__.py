@@ -14,7 +14,7 @@ def with_context(app: Flask, func: Callable) -> Callable:
 
 def format_timestamp(timestamp: datetime) -> str:
     timestamp = timestamp.astimezone(timezone.utc).replace(microsecond=0)
-    return timestamp.isoformat().replace("+00:00", "Z")
+    return timestamp.isoformat().replace("T", " ").replace("+00:00", " (UTC)")
 
 
 def parse_bool(s: str) -> bool:

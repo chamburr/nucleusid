@@ -24,6 +24,9 @@ def get_devices() -> Response:
 
     for device in Device.find_by_person(current_user.id):
         device = device.to_dict()
+
+        device["current"] = str(current_user.device_id) == device["id"]
+
         del device["person"]
         del device["token_iat"]
 
@@ -40,6 +43,9 @@ def get_devices_item(item: int) -> Response:
         return respond_error(404)
 
     device = device.to_dict()
+
+    device["current"] = str(current_user.device_id) == device["id"]
+
     del device["person"]
     del device["token_iat"]
 

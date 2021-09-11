@@ -73,7 +73,6 @@ def send_login(person: Person, device: Device):
         return
 
     timestamp = utils.format_timestamp(device.created_at)
-    timestamp = timestamp.replace("T", " ").replace("Z", " (UTC)")
 
     message = current_app.jinja_env.get_template("login.jinja").render(
         name=person.name,
