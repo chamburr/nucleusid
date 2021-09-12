@@ -1,5 +1,10 @@
 export default async ({ $axios, $fatal, store, redirect, route }) => {
   if (store.getters['user/isNull']) {
+    if (!localStorage.getItem('token') && !sessionStorage.getItem('token')) {
+      redirect(`/login?redirect=${encodeURIComponent(route.fullPath)}`)
+      return
+    }
+
     const user = await $axios.$get('/user').catch(err => {
       localStorage.clear()
       sessionStorage.clear()

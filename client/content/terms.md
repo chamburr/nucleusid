@@ -1,4 +1,4 @@
-# Introduction
+## Introduction
 
 By accessing the website or using the bot, you are agreeing to be bound by these terms of service,
 all applicable laws and regulations, and agree that you are responsible for compliance with any
@@ -6,7 +6,7 @@ applicable local laws. If you do not agree with any of these terms, you are proh
 accessing this site. The materials contained in this website are protected by applicable copyright
 and trademark law.
 
-# Use License
+## Use License
 
 Permission is granted to temporarily download one copy of the materials (information or software) on
 our website for personal, non-commercial transitory viewing only. This is the grant of a license,
@@ -24,7 +24,7 @@ terminated by NucleusID at any time. Upon terminating your viewing of these mate
 termination of this license, you must destroy any downloaded materials in your possession whether in
 electronic or printed format.
 
-# Disclaimer
+## Disclaimer
 
 The materials on our website are provided on an "as is" basis. NucleusID makes no warranties, expressed
 or implied, and hereby disclaims and negates all other warranties including, without limitation,
@@ -35,7 +35,7 @@ Further, NucleusID does not warrant or make any representations concerning the a
 or reliability of the use of the materials on its website or otherwise relating to such materials or
 on any sites linked to this site.
 
-# Limitations
+## Limitations
 
 In no event shall NucleusID or its suppliers be liable for any damages (including, without limitation,
 damages for loss of data or profit, or due to business interruption) arising out of the use or
@@ -44,25 +44,25 @@ has been notified orally or in writing of the possibility of such damage. Becaus
 do not allow limitations on implied warranties, or limitations of liability for consequential or
 incidental damages, these limitations may not apply to you.
 
-# Accuracy of materials
+## Accuracy of materials
 
 The materials appearing on our website could include technical, typographical, or photographic
 errors. NucleusID does not warrant that any of the materials on its website are accurate, complete or
 current. NucleusID may make changes to the materials contained on its website at any time without
 notice. However, NucleusID does not make any commitment to update the materials.
 
-# Links
+## Links
 
 NucleusID has not reviewed all of the sites linked to its website and is not responsible for the
 contents of any such linked site. The inclusion of any link does not imply endorsement by NucleusID of
 the site. Use of any such linked website is at the user's own risk.
 
-# Modifications
+## Modifications
 
 NucleusID may revise these terms of service for its website at any time without notice. By using this
 website you are agreeing to be bound by the then current version of these terms of service.
 
-# Governing Law
+## Governing Law
 
 These terms and conditions are governed by and construed in accordance with the laws of Singapore
 and you irrevocably submit to the exclusive jurisdiction of the courts in that State or location.

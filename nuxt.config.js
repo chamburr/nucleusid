@@ -32,7 +32,7 @@ export default {
         content:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum porta velit consequat sagittis.',
       },
-      { name: 'theme-color', content: '#ff4500' },
+      { name: 'theme-color', content: '#1e90ff' },
       { name: 'og:title', content: 'NucleusID - Your Online Identity' },
       { name: 'og:type', content: 'website' },
       { name: 'og:url', content: process.env.BASE_URI },
@@ -57,7 +57,7 @@ export default {
       { rel: 'icon', type: 'image/png', sizes: '32x32', href: 'favicon-32x32.png' },
       { rel: 'icon', type: 'image/png', sizes: '16x16', href: 'favicon-16x16.png' },
       { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
-      { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#ff4500' },
+      { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#1e90ff' },
       { rel: 'manifest', href: '/site.webmanifest' },
       { rel: 'canonical', href: process.env.BASE_URI },
     ],
@@ -90,7 +90,6 @@ export default {
     '~/plugins/error.js',
     '~/plugins/axios.js',
     '~/plugins/click-outside.js',
-    '~/plugins/content.js',
     '~/plugins/utils.js',
   ],
 
@@ -142,8 +141,7 @@ export default {
 
   bootstrapVue: {
     css: false,
-    componentPlugins: ['CollapsePlugin', 'ToastPlugin', 'ModalPlugin'],
-    directivePlugins: ['VBPopoverPlugin', 'VBTooltipPlugin'],
+    componentPlugins: ['CollapsePlugin', 'ToastPlugin', 'ModalPlugin']
   },
 
   eslint: {
@@ -163,7 +161,6 @@ export default {
         'faPlus',
         'faServer',
         'faSignOutAlt',
-        'faUserCircle',
       ],
       brands: ['faGithub'],
     },

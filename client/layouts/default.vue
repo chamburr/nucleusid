@@ -1,7 +1,7 @@
 <template>
   <div>
     <TheHeader />
-    <div id="app-flex-wrapper">
+    <div id="app-wrapper">
       <div class="container py-5 px-4">
         <Nuxt />
       </div>
@@ -15,7 +15,7 @@ export default {}
 </script>
 
 <style scoped lang="scss">
-#app-flex-wrapper {
+#app-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;

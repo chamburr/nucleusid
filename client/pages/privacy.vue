@@ -11,9 +11,9 @@
 
 <script>
 export default {
-  async asyncData({ $getContent }) {
+  async asyncData({ $content }) {
     return {
-      privacy: await $getContent('privacy', false),
+      privacy: await $content('privacy').fetch(),
     }
   },
   head: {

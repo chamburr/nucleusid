@@ -32,14 +32,12 @@ black = "^21.8b0"
 flake8 = "^3.9.2"
 isort = "^5.9.3"
 psycopg2 = "^2.9.1"
-pytest = "^6.2.5"
 sqlacodegen = "^2.3.0"
 
 [tool.poe.tasks]
 start = { shell = "poetry run gunicorn server.wsgi:app --config server/gunicorn.conf.py" }
 dev = { shell = "poetry run python3 -m server.wsgi" }
 format = { shell = "cd server && poetry run isort . && poetry run black ." }
-test = { shell = "poetry run pytest server" }
 
 [tool.black]
 line-length = 79

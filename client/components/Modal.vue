@@ -46,7 +46,7 @@ import { SlideYUpTransition } from 'vue2-transitions'
 
 export default {
   name: 'Modal',
-  components: [SlideYUpTransition],
+  components: { SlideYUpTransition },
   props: {
     show: {
       type: Boolean,
