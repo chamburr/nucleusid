@@ -33,10 +33,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#dashboard-back {
-  font-size: 0.9em;
-}
-
 #dashboard-content {
   min-width: 0;
   flex-shrink: 2;

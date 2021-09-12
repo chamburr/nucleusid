@@ -11,9 +11,9 @@
 
 <script>
 export default {
-  async asyncData({ $getContent }) {
+  async asyncData({ $content }) {
     return {
-      terms: await $getContent('terms', false),
+      terms: await $content('terms').fetch(),
     }
   },
   head: {

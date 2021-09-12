@@ -3,9 +3,9 @@
     <div id="hero-top-container">
       <div id="hero-top-content" class="container pt-2 pb-0">
         <div class="row h-100">
-          <div class="hero-top-column col-12 col-md-7 text-center text-md-left">
+          <div class="hero-top-column col-12 col-md-6 text-center text-md-left">
             <div class="d-md-none text-center mt-5 mb-3">
-              <img id="hero-top-icon-sm" src="~/static/icon.png" alt="Icon" />
+              <img id="hero-top-icon-sm" src="https://chamburr.xyz/u/aJjFr1.png" alt="Mockup" />
             </div>
             <h1 class="display-1">NucleusID</h1>
             <h2 class="display-4">
@@ -20,8 +20,8 @@
               </NuxtLink>
             </div>
           </div>
-          <div class="hero-top-column col-md-5 d-none d-md-flex align-items-center">
-            <img id="hero-top-icon" src="~/static/icon.png" alt="Icon" />
+          <div class="hero-top-column col-md-6 d-none d-md-flex align-items-center">
+            <img id="hero-top-icon" src="https://chamburr.xyz/u/aJjFr1.png" alt="Mockup" />
           </div>
         </div>
       </div>
@@ -79,7 +79,7 @@
           </NuxtLink>
         </div>
         <div class="align-items-centers mt-5">
-          <p>insert placeholder image</p>
+          <img src="https://chamburr.xyz/u/qjxgK9.png" alt="Screenshot" class="w-100 rounded" />
         </div>
       </div>
     </div>
@@ -110,8 +110,8 @@ export default {
 
 #hero-top-content {
   position: relative;
-  top: 65px;
-  height: 65vh;
+  top: 75px;
+  height: 75vh;
   min-height: 400px;
 }
 
@@ -145,16 +145,14 @@ export default {
 }
 
 #hero-top-icon-sm {
-  height: 40vw;
-  max-width: 100%;
+  width: 80%;
 }
 
 #hero-top-icon {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 35vw;
-  max-height: 55%;
+  width: 100%;
 }
 
 #hero-bottom-container {

@@ -201,7 +201,7 @@ def post_folders_item_shares(body: dict, item: int) -> Response:
         secret=secret,
     )
 
-    mail.send_share(current_user.person(), person, new_share)
+    mail.send_share(person, current_user.person())
 
     new_share = new_share.to_dict()
 

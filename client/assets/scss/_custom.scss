@@ -145,32 +145,6 @@ a:hover {
   display: none;
 }
 
-.popover-body {
-  color: white !important;
-  background-color: $dark;
-  border-radius: 0.25rem;
-}
-
-.bs-popover-top .arrow::after,
-.bs-popover-top .arrow::before {
-  border-top-color: $dark !important;
-}
-
-.bs-popover-left .arrow::after,
-.bs-popover-left .arrow::before {
-  border-left-color: $dark !important;
-}
-
-.bs-popover-right .arrow::after,
-.bs-popover-right .arrow::before {
-  border-right-color: $dark !important;
-}
-
-.bs-popover-bottom .arrow::after,
-.bs-popover-bottom .arrow::before {
-  border-bottom-color: $dark !important;
-}
-
 .dropdown-menu {
   background-color: $dark !important;
 }

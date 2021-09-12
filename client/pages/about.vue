@@ -22,8 +22,8 @@
     <h2 class="mt-5 mb-4">Team</h2>
     <div class="row">
       <div
-        v-for="element in people"
-        :key="element.name"
+        v-for="(element, index) in about.people"
+        :key="index"
         class="about-card col-12 col-md-6 col-lg-4 mt-4 mt-md-0 pb-4"
       >
         <Card class="bg-dark h-100" body-classes="d-flex flex-column text-center">
@@ -55,15 +55,15 @@
       </div>
     </div>
     <h2 class="mt-5 mb-4">Contact Us</h2>
-    <p>Email us at hi@chamburr.xyz! We hope to hear from you.</p>
+    <p>Email us at hi@chamburr.xyz! We would love to hear from you.</p>
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData({ $getContent }) {
+  async asyncData({ $content }) {
     return {
-      people: await $getContent('about'),
+      about: await $content('about').fetch(),
     }
   },
   head: {

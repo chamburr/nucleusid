@@ -17,11 +17,8 @@ def get_account(item: int) -> tuple[Optional[Account], Optional[Share]]:
     if account is None:
         return None, None
 
-    if account.person == current_user.id:
-        return account, None
-
     share = Share.find(account.folder, current_user.id)
-    if share is None or share.confirmed is False:
+    if account.person != current_user.id and (share is None or share.confirmed is False):
         return respond_error(404)
 
     return account, share

@@ -89,12 +89,11 @@ def send_login(person: Person, device: Device):
     )
 
 
-def send_share(person: Person, inviter: Person, share: Share):
+def send_share(person: Person, inviter: Person):
     if config.MAIL_ENABLED is False:
         return
 
-    # todo: confirm link
-    link = f"{config.BASE_URI}/dashboard/shares/{share.folder}"
+    link = f"{config.BASE_URI}/dashboard/shares"
 
     message = current_app.jinja_env.get_template("share.jinja").render(
         name=person.name,

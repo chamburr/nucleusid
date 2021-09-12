@@ -1,7 +1,5 @@
 import hashlib
 
-import jwt
-
 from flask import Blueprint
 from flask_login import current_user, login_required
 from webargs import fields, validate
@@ -9,7 +7,7 @@ from webargs import fields, validate
 from server.extensions import limiter
 from server.models.person import Person
 from server.routes import Response, parse_body, respond_default, respond_error
-from server.utils import config, mail, security
+from server.utils import mail, security
 
 bp = Blueprint("user", __name__)
 
@@ -47,6 +45,8 @@ def patch_user(body: dict) -> Response:
         if Person.find_by_email(body["email"]) is not None:
             return respond_error(400, "Email is already registered.")
 
+        mail.send_verify(person)
+
     person.update(
         name=body.get("name"),
         email=body.get("email"),
@@ -67,43 +67,6 @@ def delete_user(body: dict) -> Response:
         return respond_error(400, "Password is incorrect.")
 
     person.delete()
-
-    return respond_default()
-
-
-# todo: test
-@bp.post("/user/verify")
-@limiter.limit("5/minute, 25/day")
-@login_required
-@parse_body(
-    token=fields.Str(required=True),
-)
-def post_user_verify(body: dict) -> Response:
-    try:
-        payload = jwt.decode(
-            body["token"],
-            config.SECRET_KEY,
-            "HS256",
-            {
-                "requires": ["iat", "exp", "user", "email"],
-                "verify_iat": True,
-                "verify_exp": True,
-            },
-        )
-    except jwt.ExpiredSignatureError:
-        return respond_error(400, "Verification token has expired.")
-    except jwt.PyJWTError:
-        return respond_error(400, "Verification token is invalid.")
-
-    person = current_user.person()
-
-    if person.verified:
-        return respond_error(400, "Email is already verified.")
-
-    if person.id != int(payload["user"]) or person.email != payload["email"]:
-        return respond_error(400, "Verification token is invalid.")
-
-    person.update_verified()
 
     return respond_default()
 

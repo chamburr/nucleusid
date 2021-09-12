@@ -103,10 +103,10 @@ class DataCipher:
 
         length = math.floor((AES.block_size + 2) / 3) * 4
 
-        iv = base64.b64decode(data[:24])
+        iv = base64.b64decode(data[:length])
         cipher_text = base64.b64decode(data[length:])
 
-        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        cipher = AES.new(self._key, AES.MODE_CBC, iv)
 
         return unpad(cipher.decrypt(cipher_text), AES.block_size).decode()
 

@@ -1,10 +1,21 @@
 <template>
   <div>
     <Heading :title="folder.name">
-      <template v-if="!folder.built_in" slot="trailing">
-        <BaseButton type="primary" class="align-self-center" size="sm" @click="showSettings">
-          Settings
-        </BaseButton>
+      <template slot="trailing">
+        <div>
+          <BaseButton type="success" class="align-self-center" size="sm" @click="showAccountModal">
+            Add account
+          </BaseButton>
+          <BaseButton
+            v-if="!folder.built_in"
+            type="primary"
+            class="align-self-center"
+            size="sm"
+            @click="showSettings"
+          >
+            Settings
+          </BaseButton>
+        </div>
       </template>
     </Heading>
     <BaseInput v-model="search" placeholder="Search..." class="mb-4" />
@@ -18,10 +29,7 @@
       title="Folder Settings"
       ok-title="Update"
       @ok="updateSettings"
-      @cancel="
-        name = folder.name
-        email = ''
-      "
+      @cancel="reset"
     >
       <BaseInput id="folder-name" v-model="name" label="Name" />
       <p>Sharing</p>
@@ -85,6 +93,7 @@
       <p>Actions</p>
       <BaseButton type="danger" size="sm" @click="deleteFolder">Delete</BaseButton>
     </BaseModal>
+    <AccountModal :create="true" :default-folder="folder.id" />
   </div>
 </template>
 
@@ -134,6 +143,10 @@ export default {
     }
   },
   methods: {
+    reset() {
+      this.name = this.folder.name
+      this.email = ''
+    },
     async loadShares() {
       await this.$axios
         .get(`/folders/${this.folder.id}/shares`)
@@ -144,6 +157,9 @@ export default {
     },
     showSettings() {
       this.$bvModal.show('folder-modal')
+    },
+    showAccountModal() {
+      this.$bvModal.show('account-modal-')
     },
     async updateSettings() {
       await this.$axios
@@ -168,11 +184,11 @@ export default {
         })
         .catch(this.$error)
     },
-    async deleteFolder(id) {
+    async deleteFolder() {
       await this.$axios
         .delete(`/folders/${this.folder.id}`)
         .then(async () => {
-          this.$store.commit('folders/remove', id)
+          this.$store.commit('folders/remove', this.folder.id)
           this.$toast.success('Removed the folder.')
           await this.$router.push('/dashboard')
         })

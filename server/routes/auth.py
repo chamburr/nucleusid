@@ -1,6 +1,7 @@
 import requests
+import jwt
 
-from flask import Blueprint, current_app, request
+from flask import Blueprint, request
 from flask_login import current_user, login_required
 from ua_parser import user_agent_parser
 from webargs import fields, validate
@@ -9,7 +10,7 @@ from server.extensions import limiter
 from server.models.device import Device
 from server.models.person import Person
 from server.routes import Response, parse_body, respond_default, respond_error
-from server.utils import mail, security
+from server.utils import mail, security, config
 from server.utils.encryption import SecretCipher
 from server.utils.security import User
 
@@ -75,6 +76,41 @@ def post_auth_login(body: dict) -> Response:
     user = User.create(person, device, seed)
 
     return {"token": user.token}
+
+
+@bp.post("/user/verify")
+@limiter.limit("5/minute, 25/day")
+@parse_body(
+    token=fields.Str(required=True),
+)
+def post_user_verify(body: dict) -> Response:
+    try:
+        payload = jwt.decode(
+            body["token"],
+            config.SECRET_KEY,
+            "HS256",
+            {
+                "requires": ["iat", "exp", "user", "email"],
+                "verify_iat": True,
+                "verify_exp": True,
+            },
+        )
+    except jwt.ExpiredSignatureError:
+        return respond_error(400, "Verification token has expired.")
+    except jwt.PyJWTError:
+        return respond_error(400, "Verification token is invalid.")
+
+    person = Person.find(int(payload["user"]))
+
+    if person.verified:
+        return respond_error(400, "Email is already verified.")
+
+    if person.email != payload["email"]:
+        return respond_error(400, "Verification token is invalid.")
+
+    person.update_verified()
+
+    return respond_default()
 
 
 @bp.post("/auth/refresh")
