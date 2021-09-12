@@ -91,7 +91,7 @@ class Share(ShareTable):
         expiry = datetime.now() - timedelta(days=7)
 
         db.session.query(cls).filter(
-            (cls.confirmed == False) & (cls.created_at < expiry)
-        ).delete()  # noqa
+            (cls.confirmed == False) & (cls.created_at < expiry)  # noqa
+        ).delete()
 
         db.session.commit()

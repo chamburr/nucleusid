@@ -9,7 +9,6 @@ from server import utils
 from server.extensions import mail
 from server.models.device import Device
 from server.models.person import Person
-from server.models.share import Share
 from server.utils import config
 
 

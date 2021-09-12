@@ -1,5 +1,5 @@
-import requests
 import jwt
+import requests
 
 from flask import Blueprint, request
 from flask_login import current_user, login_required
@@ -10,7 +10,7 @@ from server.extensions import limiter
 from server.models.device import Device
 from server.models.person import Person
 from server.routes import Response, parse_body, respond_default, respond_error
-from server.utils import mail, security, config
+from server.utils import config, mail, security
 from server.utils.encryption import SecretCipher
 from server.utils.security import User
 
