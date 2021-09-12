@@ -38,6 +38,7 @@ sqlacodegen = "^2.3.0"
 start = { shell = "poetry run gunicorn server.wsgi:app --config server/gunicorn.conf.py" }
 dev = { shell = "poetry run python3 -m server.wsgi" }
 format = { shell = "cd server && poetry run isort . && poetry run black ." }
+lint = { shell = "cd server && poetry run flake8 . " }
 
 [tool.black]
 line-length = 79

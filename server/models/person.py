@@ -131,7 +131,9 @@ class Person(PersonTable, IdMixin):
         devices = Device.find_by_person(self.id)
         redis.delete(*(f"device:{x.id}" for x in devices))
 
-        folders = [x.id for x in Folder.find_by_person(self.id) if x.person == self.id]
+        folders = [
+            x.id for x in Folder.find_by_person(self.id) if x.person == self.id
+        ]
 
         db.session.query(Account).filter_by(person=self.id).delete()
         db.session.query(Device).filter_by(person=self.id).delete()

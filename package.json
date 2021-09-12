@@ -2,10 +2,12 @@
   "name": "client",
   "version": "0.1.0",
   "scripts": {
+    "start": "cross-env NODE_ENV=production nuxt start",
     "dev": "cross-env NODE_ENV=development nuxt",
     "build": "run-s build:clean build:nuxt",
     "build:clean": "rimraf client/.nuxt",
     "build:nuxt": "cross-env NODE_ENV=production nuxt build",
+    "generate": "cross-env NODE_ENV=production nuxt generate",
     "lint": "run-s lint:js lint:css lint:md",
     "lint:js": "eslint --ext .js,.vue .",
     "lint:css": "stylelint **/*.{vue,css}",

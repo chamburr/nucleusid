@@ -21,7 +21,9 @@ export default {
     },
     title: 'NucleusID - Your Online Identity',
     titleTemplate(titleChunk) {
-      return titleChunk === 'NucleusID - Your Online Identity' ? titleChunk : `${titleChunk} - NucleusID`
+      return titleChunk === 'NucleusID - Your Online Identity'
+        ? titleChunk
+        : `${titleChunk} - NucleusID`
     },
     meta: [
       { charset: 'utf-8' },
@@ -130,8 +132,8 @@ export default {
   proxy: {
     '/api': {
       target: `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`,
-      pathRewrite: {'^/api': '/'},
-    }
+      pathRewrite: { '^/api': '/' },
+    },
   },
 
   sentry: {
@@ -141,7 +143,7 @@ export default {
 
   bootstrapVue: {
     css: false,
-    componentPlugins: ['CollapsePlugin', 'ToastPlugin', 'ModalPlugin']
+    componentPlugins: ['CollapsePlugin', 'ToastPlugin', 'ModalPlugin'],
   },
 
   eslint: {
