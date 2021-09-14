@@ -41,7 +41,7 @@ help() {
     echo ""
     echo "COMMANDS:"
     echo "    help      Show usage information."
-    echo "    setup     reate the database and run migrations."
+    echo "    setup     Create the database and run migrations."
     echo "    reset     Reset the entire database."
     echo "    create    Create a new migration."
     echo "    migrate   Run all pending migrations."

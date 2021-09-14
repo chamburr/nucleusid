@@ -5,7 +5,7 @@
         <div class="row h-100">
           <div class="hero-top-column col-12 col-md-6 text-center text-md-left">
             <div class="d-md-none text-center mt-5 mb-3">
-              <img id="hero-top-icon-sm" src="https://chamburr.xyz/u/aJjFr1.png" alt="Mockup" />
+              <img id="hero-top-icon-sm" src="~/assets/images/mockup.png" alt="Mockup" />
             </div>
             <h1 class="display-1">NucleusID</h1>
             <h2 class="display-4">
@@ -21,7 +21,7 @@
             </div>
           </div>
           <div class="hero-top-column col-md-6 d-none d-md-flex align-items-center">
-            <img id="hero-top-icon" src="https://chamburr.xyz/u/aJjFr1.png" alt="Mockup" />
+            <img id="hero-top-icon" src="~/assets/images/mockup.png" alt="Mockup" />
           </div>
         </div>
       </div>
@@ -79,7 +79,7 @@
           </NuxtLink>
         </div>
         <div class="align-items-centers mt-5">
-          <img src="https://chamburr.xyz/u/qjxgK9.png" alt="Screenshot" class="w-100 rounded" />
+          <img src="~/assets/images/screenshot.png" alt="Screenshot" class="w-100 rounded" />
         </div>
       </div>
     </div>

@@ -67,6 +67,6 @@ practices or for other operational, legal or regulatory reasons.
 ## Contact Us
 
 For more information about our privacy practices, if you have any questions, or if you would like to
-make a complaint, please contact us through sending email to hi@wyvor.xyz.
+make a complaint, please contact us through sending email to hi@chamburr.xyz.
 
 _Last updated: 9 September 2021_
