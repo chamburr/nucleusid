@@ -1,4 +1,5 @@
 .nuxt/
+dist/
 client/static/sw.js
 node_modules/
 server/
