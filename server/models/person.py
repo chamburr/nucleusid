@@ -109,7 +109,7 @@ class Person(PersonTable, IdMixin):
 
         shares = db.session.query(Share).filter_by(person=self.id).all()
         for share in shares:
-            share.secret = cipher.re_encrypt(old_cipher, Share.secret)
+            share.secret = cipher.re_encrypt(old_cipher, share.secret)
 
         redis.delete(f"person:{self.id}")
 
