@@ -1,0 +1,21 @@
+#!/bin/sh
+
+start() {
+    if [ -d "/build" ]; then
+      rm -rf /app/dist/*
+      mv /build/* /app/dist
+      rm -rf /build
+    fi
+
+    /app/scripts/database.sh list &> /dev/null
+
+    if [ $? -ne 0 ]; then
+        /app/scripts/database.sh setup
+    else
+        /app/scripts/database.sh migrate
+    fi
+
+    poetry run poe start
+}
+
+start
