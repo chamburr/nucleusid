@@ -15,17 +15,19 @@ init() {
         warning=true
     fi
 
-    if [[ ! -f .env ]]; then
+    if [[ -f .env ]]; then
+        source .env
+    else
         echo "Warning: .env file not found. Some commands may not work."
         warning=true
-    else
-        database=$(grep "POSTGRES_DATABASE=" .env | sed 's/^.*=//')
-        username=$(grep "POSTGRES_USERNAME=" .env | sed 's/^.*=//')
-        password=$(grep "POSTGRES_PASSWORD=" .env | sed 's/^.*=//')
-        host=$(grep "POSTGRES_HOST=" .env | sed 's/^.*=//')
-        port=$(grep "POSTGRES_PORT=" .env | sed 's/^.*=//')
-        database_url="postgresql://$username:$password@$host:$port/$database"
     fi
+
+    database=$POSTGRES_DATABASE
+    username=$POSTGRES_USERNAME
+    password=$POSTGRES_PASSWORD
+    host=$POSTGRES_HOST
+    port=$POSTGRES_PORT
+    database_url="postgresql://$username:$password@$host:$port/$database"
 
     if [[ "$warning" = true ]]; then
         echo ""

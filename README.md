@@ -4,7 +4,19 @@ Your online identity. This project is a WIP.
 
 ## Running
 
-You can run this with Docker!
+You can run this app with Docker!
+
+Copy `.env.example` to `.env`, fill in the configurations, and run the following command.
+
+```sh
+docker-compose up
+```
+
+Now, simply access http://localhost:5000 to use the app!
+
+Note:
+- Some configurations cannot be changed and are specified in `config/docker.env`.
+- When you change certain configurations, you need to rebuild the client files.
 
 ## Running (development)
 
@@ -23,7 +35,7 @@ Here are the steps for running this project in development.
 To install the dependencies, run the following commands.
 
 ```sh
-cargo install diesel
+cargo install diesel_cli
 npm install -g yarn
 pip3 install -U poetry
 yarn

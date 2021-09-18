@@ -1,0 +1,60 @@
+version: '3'
+
+volumes:
+  app:
+  postgres:
+  redis:
+
+networks:
+  default:
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - BASE_URI
+        - SENTRY_DSN
+        - GOOGLE_ANALYTICS
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - default
+    volumes:
+      - app:/app/dist
+    env_file:
+      - ./.env
+      - ./config/docker.env
+
+  postgres:
+    image: postgres:13-alpine
+    restart: unless-stopped
+    networks:
+      - default
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: 'trust'
+
+  redis:
+    image: redis:6-alpine
+    restart: unless-stopped
+    networks:
+      - default
+    volumes:
+      - redis:/data
+
+  nginx:
+    image: nginx:1.20-alpine
+    restart: unless-stopped
+    ports:
+      - '5000:5000'
+    depends_on:
+      - app
+    networks:
+      - default
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
+      - app:/var/www/nucleusid/dist

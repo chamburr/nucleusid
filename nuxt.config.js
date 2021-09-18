@@ -85,6 +85,11 @@ export default {
     color: 'dodgerblue',
   },
 
+  generate: {
+    crawler: false,
+    fallback: '404.html',
+  },
+
   css: ['~/assets/scss/styles.scss'],
 
   plugins: [
