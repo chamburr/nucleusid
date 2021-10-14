@@ -35,7 +35,7 @@
                 <p class="font-weight-bolder mb-2">Legal</p>
                 <NuxtLink class="footer-link d-block" to="/terms">Terms</NuxtLink>
                 <NuxtLink class="footer-link d-block" to="/privacy">Privacy</NuxtLink>
-                <a class="footer-link d-block" target="_blank" href="mailto:hi@chamburr.xyz">
+                <a class="footer-link d-block" target="_blank" href="mailto:hi@chamburr.com">
                   Contact
                 </a>
               </div>

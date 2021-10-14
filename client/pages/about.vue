@@ -55,7 +55,7 @@
       </div>
     </div>
     <h2 class="mt-5 mb-4">Contact Us</h2>
-    <p>Email us at hi@chamburr.xyz! We would love to hear from you.</p>
+    <p>Email us at hi@chamburr.com! We would love to hear from you.</p>
   </div>
 </template>
 
