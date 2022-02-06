@@ -1,6 +1,10 @@
 # NucleusID
 
-Your online identity. This project is a WIP.
+Your online identity. Yet another password manager with modern design and state-of-the-art security.
+
+![](client/assets/images/mockup.png)
+
+This was created for my CEP project in school.
 
 ## Running
 
