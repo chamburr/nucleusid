@@ -5,7 +5,7 @@ description: The database design, diagram and some explanations.
 
 Here is an overview of the database design in ER diagram.
 
-<img src="https://chamburr.xyz/u/Td42a7.png" alt="Diagram" width="100%">
+<img src="https://user-images.githubusercontent.com/42373024/194285481-f3a38499-5018-40ae-adde-47edbd094b7f.png" alt="Diagram" width="100%">
 <br><br>
 
 ## Diesel schema migrations
