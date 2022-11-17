@@ -21,7 +21,7 @@ ENV GOOGLE_ANALYTICS $GOOGLE_ANALYTICS
 
 RUN yarn generate
 
-FROM rust:1.55-slim-buster AS rust-builder
+FROM rust:1.65-slim-buster AS rust-builder
 
 RUN apt-get update \
     && apt-get -y install musl-dev libpq-dev
