@@ -1,4 +1,6 @@
-FROM node:16-alpine AS node-builder
+FROM node:16-alpine3.17 AS node-builder
+
+RUN apk add --no-cache python3 make g++
 
 RUN npm install --global --force yarn
 
@@ -21,7 +23,7 @@ ENV GOOGLE_ANALYTICS $GOOGLE_ANALYTICS
 
 RUN yarn generate
 
-FROM rust:1.65-slim-buster AS rust-builder
+FROM rust:1.75-slim-buster AS rust-builder
 
 RUN apt-get update \
     && apt-get -y install musl-dev libpq-dev
